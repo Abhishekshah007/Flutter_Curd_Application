@@ -55,6 +55,9 @@ class _InternListState extends State<InternList> {
                     direction: DismissDirection.horizontal,
                     onDismissed: (direction) {
                       if (direction == DismissDirection.endToStart) {
+                        setState(() {
+                          interns.removeAt(index); // Remove the dismissed Dismissible widget from the tree
+                        });
                         // Handle editing by opening a new page with form fields to update data
                         _deleteItem(internName.id);
                       } else if (direction == DismissDirection.startToEnd) {
@@ -91,11 +94,22 @@ class _InternListState extends State<InternList> {
                       child: Card(
                         child: ListTile(
                           title: Text(
-                              internName.name.toString(),
-                              style: const TextStyle(
-                                  fontSize: 20, color: Colors.blueGrey)),
-                          subtitle:
-                          Text(internName.designation.toString()),
+                            internName.name.toString(),
+                            style: const TextStyle(fontSize: 20, color: Colors.blueGrey),
+                          ),
+                          subtitle: Text(internName.designation.toString()),
+                          trailing: InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => UpdatingInternDetails(id: internName.id),
+                                ),
+                              );
+                              setState(() {});
+                            },
+                            child: const Icon(Icons.ac_unit),
+                          ),
                         ),
                       ),
                     ),
